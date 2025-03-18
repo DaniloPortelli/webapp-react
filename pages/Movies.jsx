@@ -1,12 +1,33 @@
-import Header from "../components/Header"
 import { useParams } from "react-router-dom"
+import { useState, useEffect } from "react"
 
-export default function Movies() {
+import ReviewCard from '../components/ReviewCard';
+
+
+export default function Movies({reviews}) {
     const { id } = useParams()
 
-    return (
-        <>
-            <h1>Movie n. {id}</h1>
-        </>
-    )
+    const [movie, setMovie] = useState()
+    
+        useEffect(() => {
+    
+            fetch(`http://localhost:3000/movies/${id}`)
+                .then(res => res.json())
+                .then(setMovie)
+    
+        }, [id])
+
+  
+
+          return (
+            <>
+              <h1>{movie?.title}</h1>
+              <img src={movie?.image} alt={movie?.title} />
+        
+              <section>
+                <h4>Our community reviews</h4>
+                {renderReviews()}
+              </section>
+            </>
+          )
 }
