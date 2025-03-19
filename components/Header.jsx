@@ -6,6 +6,7 @@ export default function Header() {
             <NavLink to={"/"}>
                 Home
             </NavLink>
+            
         </header>
     )
 }

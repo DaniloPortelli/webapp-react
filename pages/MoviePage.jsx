@@ -2,9 +2,10 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import ReviewCard from '../components/ReviewCard';
+import ReviewForm from '../components/ReviewForm';
 
 export default function MoviePage() {
-    const { id } = useParams(); 
+    const { id } = useParams();
 
     const [movie, setMovie] = useState({});
 
@@ -22,15 +23,19 @@ export default function MoviePage() {
 
     const renderReviews = () => {
         return movie.reviews?.map((review) => {
-          return <ReviewCard key={review.id} review={review} />;
+            return <ReviewCard key={review.id} review={review} />;
         });
-      };
+    };
 
     return (
         <>
             <h1>{movie?.title}</h1>
             <section>
                 {renderReviews()}
+            </section>
+
+            <section>
+                {movie?.id && <ReviewForm movie_id={movie.id} reloadReviews={fetchMovie} />} 
             </section>
         </>
     );
