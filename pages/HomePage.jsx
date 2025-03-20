@@ -1,44 +1,50 @@
 import MovieCard from "../components/MovieCard"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useContext } from "react"
+import GlobalContext from '../contexts/globalContext';
 
 export default function HomePage() {
 
-    const [movies, setMovies] = useState([])
+  const [movies, setMovies] = useState([])
 
-    const fetchMovies = () => { 
+  const { setIsLoading } = useContext(GlobalContext)
 
-        fetch("http://localhost:3000/movies")
-            .then(res => res.json())
-            .then(setMovies)
-          .catch((error) => {
-            console.log(error);
-          });
-      };
+  const fetchMovies = () => {
 
-      const renderMovies = () => {
-        return movies.map((movie) => {
+    setIsLoading(true)
+
+    fetch("http://localhost:3000/movies")
+      .then(res => res.json())
+      .then(setMovies)
+      .catch((error) => {
+        console.log(error);
+      })
+      .then( () => setIsLoading(false) );
+  };
+
+  const renderMovies = () => {
+    return movies.map((movie) => {
+      return (
+        <div key={movie.id}>
+          <MovieCard movie={movie} />
+        </div>
+      );
+    });
+  };
+
+  useEffect(fetchMovies, []);
+
+  return (
+    <>
+
+      <div>
+        {movies.map((movie) => {
           return (
             <div key={movie.id}>
               <MovieCard movie={movie} />
             </div>
           );
-        });
-      };
-
-      useEffect(fetchMovies, []);
-
-      return (
-        <>
-          
-          <div>
-            {movies.map((movie) => {
-              return (
-                <div key={movie.id}>
-                  <MovieCard movie={movie} />
-                </div>
-              );
-            })}
-          </div>
-        </>
-      );
+        })}
+      </div>
+    </>
+  );
 }
